@@ -14,6 +14,7 @@ fn main() {
                 println!("  -c, --chinese        使用中文原文");
                 println!("  -d, --dual           双模式：前全拼后首字母");
                 println!("  --dual-reverse       双模式：前首字母后全拼");
+                println!("  -r, --random-caps    随机大写至少一个字母");
                 println!("  -n, --count N        生成N个密码");
                 println!("  -s, --source         显示密码来源");
                 println!("  -h, --help           显示帮助");
@@ -33,6 +34,9 @@ fn main() {
             }
             "--dual-reverse" => {
                 println!("{}", Generator::new().front_init_back_full().generate());
+            }
+            "-r" | "--random-caps" => {
+                println!("{}", Generator::new().random_capitalize().generate());
             }
             "-s" | "--source" => {
                 let (password, source) = Generator::new().generate_with_source();

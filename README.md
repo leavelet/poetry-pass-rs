@@ -43,8 +43,9 @@ let password = Generator::new()
     .poetry_only()
     .separator("_")
     .no_number()
+    .random_capitalize()
     .generate();
-// Example: "yingwu_guilaojianghubian"
+// Example: "yingWu_guiLaojianghubIan"
 
 // Generate with source for memorization
 let (password, source) = Generator::new().generate_with_source();

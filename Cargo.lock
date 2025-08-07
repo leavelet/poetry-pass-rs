@@ -52,7 +52,7 @@ checksum = "16f2611cd06a1ac239a0cea4521de9eb068a6ca110324ee00631aa68daa74fc0"
 
 [[package]]
 name = "poetry-pass"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "pinyin",
  "rand",

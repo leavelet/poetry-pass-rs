@@ -7,6 +7,7 @@ pub struct Generator {
     mode: TransformMode,
     separator: String,
     add_number: bool,
+    random_capitalize: bool,
 }
 
 impl Generator {
@@ -17,6 +18,7 @@ impl Generator {
             mode: TransformMode::Single(Mode::PinyinFull), // Default to Full Pinyin
             separator: "-".to_string(),
             add_number: true,
+            random_capitalize: false,
         }
     }
     
@@ -86,6 +88,51 @@ impl Generator {
         self
     }
     
+    /// Enable random capitalization of at least one letter
+    pub fn random_capitalize(mut self) -> Self {
+        self.random_capitalize = true;
+        self
+    }
+    
+    /// Apply random capitalization to at least one letter in the password
+    fn apply_random_capitalization(password: &str) -> String {
+        let mut chars: Vec<char> = password.chars().collect();
+        let mut rng = rand::rng();
+        
+        // Find all letter positions
+        let letter_positions: Vec<usize> = chars
+            .iter()
+            .enumerate()
+            .filter_map(|(i, &c)| if c.is_ascii_alphabetic() { Some(i) } else { None })
+            .collect();
+        
+        if letter_positions.is_empty() {
+            return password.to_string();
+        }
+        
+        // Randomly choose 1-3 letters to capitalize (but at least 1)
+        let num_to_capitalize = rng.random_range(1..=3.min(letter_positions.len()));
+        
+        // Randomly select positions to capitalize
+        let mut selected_positions = Vec::new();
+        for _ in 0..num_to_capitalize {
+            loop {
+                let pos = letter_positions[rng.random_range(0..letter_positions.len())];
+                if !selected_positions.contains(&pos) {
+                    selected_positions.push(pos);
+                    break;
+                }
+            }
+        }
+        
+        // Apply capitalization
+        for &pos in &selected_positions {
+            chars[pos] = chars[pos].to_ascii_uppercase();
+        }
+        
+        chars.into_iter().collect()
+    }
+    
     /// Generate a random passphrase
     pub fn generate(&self) -> String {
         let provider = Provider::new(self.source.clone());
@@ -113,6 +160,10 @@ impl Generator {
         if self.add_number {
             let num: u32 = rng.random_range(1000..10000);  // 0.9: gen_range -> random_range, 4位数字
             result.push_str(&format!("{}{}", &self.separator, num));
+        }
+        
+        if self.random_capitalize {
+            result = Self::apply_random_capitalization(&result);
         }
         
         result
@@ -143,6 +194,10 @@ impl Generator {
             let mut rng = rand::rng();
             let num: u32 = rng.random_range(1000..10000);
             password.push_str(&format!("{}{}", &self.separator, num));
+        }
+        
+        if self.random_capitalize {
+            password = Self::apply_random_capitalization(&password);
         }
         
         (password, source)

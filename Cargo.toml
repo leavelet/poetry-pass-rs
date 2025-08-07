@@ -1,6 +1,6 @@
 [package]
 name = "poetry-pass"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 authors = ["leavelet <leavelet@163.com>"]
 description = "A memorable password generator using Chinese poetry and pinyin"
