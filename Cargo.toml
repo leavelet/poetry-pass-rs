@@ -1,0 +1,23 @@
+[package]
+name = "poetry-pass"
+version = "0.1.0"
+edition = "2021"
+authors = ["leavelet <leavelet@163.com>"]
+description = "A memorable password generator using Chinese poetry and pinyin"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/leavelet/poetry-pass-rs"
+keywords = ["password", "generator", "chinese", "poetry", "pinyin"]
+categories = ["command-line-utilities"]
+build = "build.rs"
+
+[dependencies]
+rand = "0.9"
+pinyin = "0.10" 
+
+[build-dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+[[example]]
+name = "basic_usage"
+path = "examples/basic_usage.rs"
