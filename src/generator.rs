@@ -76,6 +76,30 @@ impl Generator {
         self
     }
     
+    /// Use words-poetry combination (front: words, back: poetry)
+    pub fn words_poetry(mut self) -> Self {
+        self.source = Source::WordsPoetry;
+        self
+    }
+    
+    /// Use poetry-words combination (front: poetry, back: words)
+    pub fn poetry_words(mut self) -> Self {
+        self.source = Source::PoetryWords;
+        self
+    }
+    
+    /// Use words-words combination (front: words, back: words)
+    pub fn words_words(mut self) -> Self {
+        self.source = Source::WordsWords;
+        self
+    }
+    
+    /// Use poetry-poetry combination (front: poetry, back: poetry)
+    pub fn poetry_poetry(mut self) -> Self {
+        self.source = Source::PoetryPoetry;
+        self
+    }
+    
     /// Set separator between parts
     pub fn separator(mut self, sep: &str) -> Self {
         self.separator = sep.to_string();
@@ -145,6 +169,13 @@ impl Generator {
                     provider.get_poetry(),
                 ]
             }
+            Source::WordsPoetry | Source::PoetryWords | 
+            Source::WordsWords | Source::PoetryPoetry => {
+                vec![
+                    provider.get_front(),
+                    provider.get_back(),
+                ]
+            }
             _ => {
                 vec![
                     provider.get(),
@@ -179,6 +210,13 @@ impl Generator {
         let parts = match self.source {
             Source::Mixed => {
                 vec![provider.get(), provider.get_poetry()]
+            }
+            Source::WordsPoetry | Source::PoetryWords | 
+            Source::WordsWords | Source::PoetryPoetry => {
+                vec![
+                    provider.get_front(),
+                    provider.get_back(),
+                ]
             }
             _ => {
                 vec![provider.get(), provider.get()]
